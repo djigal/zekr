@@ -16,7 +16,10 @@
       "Bash(jar -tf:*)",
       "Bash(javac:*)",
       "Bash(find:*)",
-      "Bash(javap:*)"
+      "Bash(javap:*)",
+      "Bash(mvn:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)"
     ]
   }
 }
