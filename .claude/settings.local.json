@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(curl:*)",
+      "Bash(ls:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:sourceforge.net)",
+      "Bash(tar:*)",
+      "Bash(ant dist:*)",
+      "Bash(java:*)",
+      "Bash(cat:*)",
+      "Bash(tasklist:*)",
+      "Bash(grep:*)",
+      "Bash(jar -tf:*)",
+      "Bash(javac:*)",
+      "Bash(find:*)",
+      "Bash(javap:*)"
+    ]
+  }
+}
