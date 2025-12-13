@@ -3,6 +3,10 @@
 
 # Log file
 *.log
+*.log.*
+
+# PS files
+*.ps
 
 # BlueJ files
 *.ctxt
