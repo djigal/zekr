@@ -23,7 +23,9 @@
       "Bash(Select-String -Pattern \"warning:|error:|BUILD\")",
       "Bash(Select-Object -Last 30)",
       "Bash(test:*)",
-      "Bash(where:*)"
+      "Bash(where:*)",
+      "Bash(/c/jdk-21.0.2/bin/javac:*)",
+      "Bash(done)"
     ]
   }
 }

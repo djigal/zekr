@@ -37,12 +37,16 @@ public class ZekrFileResourceLoader extends ResourceLoader {
 
 	public synchronized InputStream getResourceStream(String templateName) throws ResourceNotFoundException {
 		InputStream is = null;
+
+		// First try to load from filesystem
 		try {
 			is = new BufferedInputStream(new FileInputStream(new File(templateName).getAbsolutePath()));
 		} catch (FileNotFoundException e) {
-			// do nothing!
+			// If not found on filesystem, try to load from classpath
+			is = getClass().getClassLoader().getResourceAsStream(templateName);
 		}
-		if (is != null) // if no exception occurred
+
+		if (is != null) // if resource was found
 			return is;
 
 		throw new ResourceNotFoundException("Resource not found: " + templateName);

@@ -176,7 +176,12 @@ public class AudioCacheManager {
 
 			List<File> fileList = new ArrayList<File>();
 			for (File dir : audioDirectoryList) {
-				fileList.addAll(Arrays.asList(dir.listFiles()));
+				File[] files = dir.listFiles();
+				if (files != null) {
+					fileList.addAll(Arrays.asList(files));
+				} else {
+					logger.warn("Cannot list files from audio directory: " + dir);
+				}
 			}
 
 			// return older files first

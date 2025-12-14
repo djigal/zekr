@@ -45,18 +45,18 @@ public class FileUtils {
 	private static boolean deltree(File file) {
 		if (file == null)
 			return true;
-		if (file.isFile() || file.list() == null)
-			return file.delete();
-		if (file.list().length == 0) // is an empty directory
+		if (file.isFile())
 			return file.delete();
 
-		int fileNum = file.list().length;
+		// Cache list() result to avoid multiple calls and race conditions
 		String[] names = file.list();
-		for (int i = 0; i < fileNum; i++) {
-			if (file.isFile())
-				file.delete();
-			else
-				deltree(new File(file.getPath() + File.separatorChar + names[i]));
+		if (names == null)
+			return file.delete();
+		if (names.length == 0) // is an empty directory
+			return file.delete();
+
+		for (int i = 0; i < names.length; i++) {
+			deltree(new File(file.getPath() + File.separatorChar + names[i]));
 		}
 		return file.delete();
 	}

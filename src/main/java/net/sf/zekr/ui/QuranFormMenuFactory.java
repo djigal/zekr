@@ -491,8 +491,9 @@ public class QuranFormMenuFactory {
       audioMenu = new Menu(shell, SWT.DROP_DOWN | direction);
       audioItem.setMenu(audioMenu);
 
-      playIconFullPath = new File(resource.getString(rtl ? "icon.menu.playRtl" : "icon.menu.play")).getAbsolutePath();
-      pauseIconFullPath = new File(resource.getString("icon.menu.pause")).getAbsolutePath();
+      // Store resource paths directly instead of filesystem paths for classpath compatibility
+      playIconFullPath = resource.getString(rtl ? "icon.menu.playRtl" : "icon.menu.play");
+      pauseIconFullPath = resource.getString("icon.menu.pause");
 
       playItem = createMenuItem(SWT.PUSH, audioMenu, lang.getMeaning("PLAY"), "playerTogglePlayPause", rtl ? "icon.menu.playRtl"
             : "icon.menu.play");

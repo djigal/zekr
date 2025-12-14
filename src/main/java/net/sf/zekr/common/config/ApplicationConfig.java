@@ -636,12 +636,16 @@ public class ApplicationConfig implements ConfigNaming {
             File bookmarkFolderAlreadyCopied = new File(Naming.getBookmarkDir() + "/.DONOTDELETE");
             if (!bookmarkFolderAlreadyCopied.exists()) {
                File[] origs = origBookmarkDir.listFiles(xmlFilter);
-               for (int i = 0; i < origs.length; i++) {
-                  File destFile = new File(bookmarkDir + "/" + origs[i].getName());
-                  if (!destFile.exists()) {
-                     logger.info("Copy bookmark " + origs[i] + " to " + Naming.getBookmarkDir());
-                     FileUtils.copyFile(origs[i], destFile);
+               if (origs != null) {
+                  for (int i = 0; i < origs.length; i++) {
+                     File destFile = new File(bookmarkDir + "/" + origs[i].getName());
+                     if (!destFile.exists()) {
+                        logger.info("Copy bookmark " + origs[i] + " to " + Naming.getBookmarkDir());
+                        FileUtils.copyFile(origs[i], destFile);
+                     }
                   }
+               } else {
+                  logger.warn("Cannot list bookmark files from: " + origBookmarkDir);
                }
             }
          }
@@ -1029,8 +1033,20 @@ public class ApplicationConfig implements ConfigNaming {
       String[] paths = { ApplicationPath.AUDIO_DIR, Naming.getAudioDir() };
       for (int pathIndex = 0; pathIndex < paths.length; pathIndex++) {
          File audioDir = new File(paths[pathIndex]);
+
+         // If the audio directory doesn't exist as a file, try to load it from the classpath
          if (!audioDir.exists()) {
-            continue;
+            try {
+               java.net.URL resourceUrl = getClass().getClassLoader().getResource(paths[pathIndex]);
+               if (resourceUrl != null) {
+                  audioDir = new File(resourceUrl.toURI());
+               } else {
+                  continue;
+               }
+            } catch (Exception e) {
+               logger.debug("Cannot load audio directory from classpath: " + paths[pathIndex]);
+               continue;
+            }
          }
 
          logger.info("Loading audio files info from: " + audioDir);
@@ -1043,6 +1059,11 @@ public class ApplicationConfig implements ConfigNaming {
             }
          };
          File[] audioPropFiles = audioDir.listFiles(filter);
+
+         if (audioPropFiles == null) {
+            logger.warn("Cannot list audio property files from: " + audioDir);
+            audioPropFiles = new File[0];
+         }
 
          for (int audioIndex = 0; audioIndex < audioPropFiles.length; audioIndex++) {
             try {
@@ -1210,6 +1231,11 @@ public class ApplicationConfig implements ConfigNaming {
       };
       File[] revelFiles = revelDir.listFiles(filter);
 
+      if (revelFiles == null) {
+         logger.warn("Cannot list revelation files from: " + revelDir);
+         revelFiles = new File[0];
+      }
+
       RevelationData rd;
       for (int revelIndex = 0; revelIndex < revelFiles.length; revelIndex++) {
          ZipFile zipFile = null;
@@ -1293,7 +1319,15 @@ public class ApplicationConfig implements ConfigNaming {
             return false;
          }
       };
-      File[] pagingFiles = pagingDir.exists() ? pagingDir.listFiles(filter) : new File[0];
+      File[] pagingFiles = new File[0];
+      if (pagingDir.exists()) {
+         File[] files = pagingDir.listFiles(filter);
+         if (files != null) {
+            pagingFiles = files;
+         } else {
+            logger.warn("Cannot list paging files from: " + pagingDir);
+         }
+      }
 
       // add built-in paging implementations
       quranPaging.add(new SuraPagingData());
@@ -1301,7 +1335,7 @@ public class ApplicationConfig implements ConfigNaming {
       quranPaging.add(new HizbQuarterPagingData());
       quranPaging.add(new JuzPagingData());
 
-      if (pagingFiles != null) {
+      if (pagingFiles.length > 0) {
          CustomPagingData cpd;
          for (int i = 0; i < pagingFiles.length; i++) {
             cpd = new CustomPagingData();
