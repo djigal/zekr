@@ -21,7 +21,9 @@
       "Bash(findstr:*)",
       "Bash(taskkill:*)",
       "Bash(Select-String -Pattern \"warning:|error:|BUILD\")",
-      "Bash(Select-Object -Last 30)"
+      "Bash(Select-Object -Last 30)",
+      "Bash(test:*)",
+      "Bash(where:*)"
     ]
   }
 }

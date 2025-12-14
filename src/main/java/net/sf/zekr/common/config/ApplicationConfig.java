@@ -606,6 +606,18 @@ public class ApplicationConfig implements ConfigNaming {
       File bookmarkDir = new File(Naming.getBookmarkDir());
       File origBookmarkDir = new File(res.getString("bookmark.baseDir"));
 
+      // If the bookmark directory doesn't exist as a file, try to load it from the classpath
+      if (!origBookmarkDir.exists()) {
+         try {
+            java.net.URL resourceUrl = getClass().getClassLoader().getResource(res.getString("bookmark.baseDir"));
+            if (resourceUrl != null) {
+               origBookmarkDir = new File(resourceUrl.toURI());
+            }
+         } catch (Exception e) {
+            logger.log(e);
+         }
+      }
+
       FileFilter xmlFilter = new FileFilter() { // accept .xml files
          public boolean accept(File pathname) {
             if (pathname.getName().toLowerCase().endsWith(".xml")) {
@@ -639,12 +651,14 @@ public class ApplicationConfig implements ConfigNaming {
 
       String def = props.getString("bookmark.default");
       File[] bookmarkSets = bookmarkDir.listFiles(xmlFilter);
-      for (int i = 0; i < bookmarkSets.length; i++) {
-         // bookmarks should be lazily loaded
-         BookmarkSet bms = new BookmarkSet(Naming.getBookmarkDir() + "/" + bookmarkSets[i].getName());
-         bookmarkSetGroup.addBookmarkSet(bms);
-         if (bms.getId().equals(def)) {
-            bookmarkSetGroup.setAsDefault(bms);
+      if (bookmarkSets != null) {
+         for (int i = 0; i < bookmarkSets.length; i++) {
+            // bookmarks should be lazily loaded
+            BookmarkSet bms = new BookmarkSet(Naming.getBookmarkDir() + "/" + bookmarkSets[i].getName());
+            bookmarkSetGroup.addBookmarkSet(bms);
+            if (bms.getId().equals(def)) {
+               bookmarkSetGroup.setAsDefault(bms);
+            }
          }
       }
       if (bookmarkSetGroup.getDefault() == null) {
