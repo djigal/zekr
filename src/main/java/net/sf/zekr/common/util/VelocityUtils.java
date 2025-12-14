@@ -58,12 +58,12 @@ public class VelocityUtils {
    }
 
    public Integer toInteger(Object num) {
-      return new Integer(toDouble(num).intValue());
+      return Integer.valueOf(toDouble(num).intValue());
    }
 
    public Integer round(Object num) {
       Number n = toDouble(num);
-      return new Integer((int) Math.rint(n.doubleValue()));
+      return Integer.valueOf((int) Math.rint(n.doubleValue()));
    }
 
    @SuppressWarnings("rawtypes")

@@ -15,7 +15,7 @@ import java.util.List;
 
 import net.sf.zekr.common.resource.IQuranLocation;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 public class SearchScope {
    List<SearchScopeItem> list = new ArrayList<SearchScopeItem>();

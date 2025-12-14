@@ -247,7 +247,7 @@ public class SearchScopeForm extends BaseForm {
 							itemEditor.addSelectionListener(new SelectionAdapter() {
 								public void widgetSelected(SelectionEvent e) {
 									CCombo c = (CCombo) e.widget;
-									item.setData(String.valueOf(column), new Integer(c.getSelectionIndex() + 1));
+									item.setData(String.valueOf(column), Integer.valueOf(c.getSelectionIndex() + 1));
 								}
 							});
 							itemEditor.setVisibleItemCount(10);
@@ -272,7 +272,7 @@ public class SearchScopeForm extends BaseForm {
 											if (!QuranLocation.isValidLocation(((Integer) item.getData(String.valueOf(column)))
 													.intValue(), ((Integer) item.getData(String.valueOf(column + 1))).intValue())) {
 												item.setText(column + 1, "1");
-												item.setData(String.valueOf(column + 1), new Integer(1));
+												item.setData(String.valueOf(column + 1), Integer.valueOf(1));
 											}
 										}
 										break;
@@ -285,7 +285,7 @@ public class SearchScopeForm extends BaseForm {
 												if (!QuranLocation.isValidLocation(((Integer) item.getData(String.valueOf(column)))
 														.intValue(), ((Integer) item.getData(String.valueOf(column + 1))).intValue())) {
 													item.setText(column + 1, "1");
-													item.setData(String.valueOf(column + 1), new Integer(1));
+													item.setData(String.valueOf(column + 1), Integer.valueOf(1));
 												}
 											}
 											// FALL THROUGH
@@ -330,11 +330,11 @@ public class SearchScopeForm extends BaseForm {
 
 		final TableItem item = new TableItem(table, SWT.NONE);
 		item.setText(new String[] { sf, String.valueOf(af), st, String.valueOf(at), exclText });
-		item.setData("0", new Integer(ssi.getSuraFrom()));
-		item.setData("1", new Integer(af));
-		item.setData("2", new Integer(ssi.getSuraTo()));
-		item.setData("3", new Integer(at));
-		item.setData("4", ssi.isExclusive() ? new Integer(2) : new Integer(1));
+		item.setData("0", Integer.valueOf(ssi.getSuraFrom()));
+		item.setData("1", Integer.valueOf(af));
+		item.setData("2", Integer.valueOf(ssi.getSuraTo()));
+		item.setData("3", Integer.valueOf(at));
+		item.setData("4", ssi.isExclusive() ? Integer.valueOf(2) : Integer.valueOf(1));
 
 		return item;
 	}

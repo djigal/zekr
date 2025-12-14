@@ -26,7 +26,7 @@ import net.sf.zekr.ui.helper.EventProtocol;
 import net.sf.zekr.ui.helper.EventUtils;
 import net.sf.zekr.ui.helper.FormUtils;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;

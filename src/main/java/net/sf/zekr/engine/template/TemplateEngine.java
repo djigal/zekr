@@ -13,12 +13,12 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 
 import net.sf.zekr.common.runtime.Naming;
 import net.sf.zekr.engine.log.Logger;
 
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -27,7 +27,7 @@ import org.apache.velocity.app.Velocity;
  * An adapter class for velocity template engine.<br>
  * This class is not singleton due to thread-safety issues. A call to {@link #getInstance()} simply returns a
  * new instance.
- * 
+ *
  * @author Mohsen Saboorian
  */
 public class TemplateEngine {
@@ -40,7 +40,7 @@ public class TemplateEngine {
 			System.setProperty("zekr.home", Naming.getWorkspace());
 
 			// Configure Velocity to use classpath resource loader
-			ExtendedProperties props = new ExtendedProperties();
+			Properties props = new Properties();
 
 			// Try to load velocity.properties from classpath
 			java.io.InputStream velocityPropsStream = getClass().getClassLoader().getResourceAsStream("velocity.properties");
@@ -55,11 +55,14 @@ public class TemplateEngine {
 
 			// Set resource loader to use classpath
 			props.setProperty("resource.loader", "class");
-			props.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+			props.setProperty("resource.loader.class.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 			props.setProperty("velocimacro.library", "VM_global_library.vm");
 
+			// In Velocity 2.x, use individual property setting instead of setExtendedProperties
+			for (String key : props.stringPropertyNames()) {
+				Velocity.setProperty(key, props.getProperty(key));
+			}
 
-			Velocity.setExtendedProperties(props);
 			Velocity.init();
 			context = new VelocityContext();
 		} catch (Exception e) {
@@ -85,7 +88,7 @@ public class TemplateEngine {
 
 	/**
 	 * Add a key-value pair to the template engine context.
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 */
@@ -95,7 +98,7 @@ public class TemplateEngine {
 
 	/**
 	 * Add a key-value pair to the template engine context. value should be of type <code>String</code>.
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 */

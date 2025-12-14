@@ -22,7 +22,7 @@ import net.sf.zekr.engine.addonmgr.CandidateResource;
 import net.sf.zekr.engine.addonmgr.Resource;
 import net.sf.zekr.engine.addonmgr.ResourceManager;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 /**

@@ -343,7 +343,7 @@ public class BookmarkItemForm extends BaseForm {
 									cc.addSelectionListener(new SelectionAdapter() {
 										public void widgetSelected(SelectionEvent e) {
 											CCombo c = (CCombo) e.widget;
-											item.setData(String.valueOf(column), new Integer(c.getSelectionIndex() + 1));
+											item.setData(String.valueOf(column), Integer.valueOf(c.getSelectionIndex() + 1));
 										}
 									});
 									cc.setVisibleItemCount(10);
@@ -363,8 +363,8 @@ public class BookmarkItemForm extends BaseForm {
 												Text t = (Text) itemEditor;
 												if (QuranLocation.isValidLocation(t.getText())) {
 													IQuranLocation loc = new QuranLocation(t.getText());
-													Integer sura = new Integer(loc.getSura());
-													Integer aya = new Integer(loc.getAya());
+													Integer sura = Integer.valueOf(loc.getSura());
+													Integer aya = Integer.valueOf(loc.getAya());
 													item.setText(0, QuranPropertiesUtils.getIndexedSuraName(sura.intValue()));
 													item.setText(1, aya.toString());
 													item.setData("0", sura);
@@ -383,7 +383,7 @@ public class BookmarkItemForm extends BaseForm {
 												if (!QuranLocation.isValidLocation(((Integer) item.getData("0")).intValue(),
 														((Integer) item.getData("1")).intValue())) {
 													item.setText(1, "1");
-													item.setData("1", new Integer(1));
+													item.setData("1", Integer.valueOf(1));
 												}
 												item.setText(2, new QuranLocation(((Integer) item.getData("0")).intValue(),
 														((Integer) item.getData("1")).intValue()).toString());
@@ -399,8 +399,8 @@ public class BookmarkItemForm extends BaseForm {
 													Text t = (Text) itemEditor;
 													if (QuranLocation.isValidLocation(t.getText())) {
 														IQuranLocation loc = new QuranLocation(t.getText());
-														Integer sura = new Integer(loc.getSura());
-														Integer aya = new Integer(loc.getAya());
+														Integer sura = Integer.valueOf(loc.getSura());
+														Integer aya = Integer.valueOf(loc.getAya());
 														item.setText(0, QuranPropertiesUtils.getIndexedSuraName(sura.intValue()));
 														item.setText(1, aya.toString());
 														item.setData("0", sura);
@@ -418,7 +418,7 @@ public class BookmarkItemForm extends BaseForm {
 													if (!QuranLocation.isValidLocation(((Integer) item.getData("0")).intValue(),
 															((Integer) item.getData("1")).intValue())) {
 														item.setText(1, "1");
-														item.setData("1", new Integer(1));
+														item.setData("1", Integer.valueOf(1));
 													}
 													item.setText(2, new QuranLocation(((Integer) item.getData("0")).intValue(),
 															((Integer) item.getData("1")).intValue()).toString());
@@ -478,8 +478,8 @@ public class BookmarkItemForm extends BaseForm {
 
 		final TableItem item = new TableItem(table, SWT.NONE);
 		item.setText(new String[] { sura, "" + aya, suraAya });
-		item.setData("0", new Integer(loc.getSura()));
-		item.setData("1", new Integer(aya));
+		item.setData("0", Integer.valueOf(loc.getSura()));
+		item.setData("1", Integer.valueOf(aya));
 		item.setData("2", suraAya);
 
 		return item;

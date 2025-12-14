@@ -6,7 +6,7 @@
 *.log.*
 
 # PS files
-*.ps
+*.ps1
 
 # BlueJ files
 *.ctxt

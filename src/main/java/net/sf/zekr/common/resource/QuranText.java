@@ -16,7 +16,7 @@ import net.sf.zekr.common.config.ApplicationConfig;
 import net.sf.zekr.common.config.ApplicationPath;
 import net.sf.zekr.common.config.ResourceManager;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 
 // TODO: All singleton classes of this kind should be gradually moved as a non-singleton class under
 // ApplicationConfig. Once ApplicationConfig is initialized, a single instance of these class will be stored

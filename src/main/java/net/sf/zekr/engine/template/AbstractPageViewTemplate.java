@@ -41,12 +41,12 @@ public class AbstractPageViewTemplate extends BaseViewTemplate {
 		try {
 			engine.put("PAGE_MODE", config.getPagingMode());
 			engine.put("TITLE", langEngine.getMeaning("PAGE") + ": " + quranPage.getPageNum());
-			engine.put("SURA_NUM", new Integer(userView.getLocation().getSura()));
-			engine.put("AYA_NUM", new Integer(userView.getLocation().getAya()));
-			engine.put("AYA_NUM_IN_PAGE", new Integer(1 + QuranPropertiesUtils.diff(userView.getLocation(), quranPage
+			engine.put("SURA_NUM", Integer.valueOf(userView.getLocation().getSura()));
+			engine.put("AYA_NUM", Integer.valueOf(userView.getLocation().getAya()));
+			engine.put("AYA_NUM_IN_PAGE", Integer.valueOf(1 + QuranPropertiesUtils.diff(userView.getLocation(), quranPage
 					.getFrom())));
-			engine.put("PAGE_NUM", new Integer(userView.getPage()));
-			engine.put("AYA_COUNT", new Integer(quranPage.getTo().getAbsoluteAya() - quranPage.getFrom().getAbsoluteAya()
+			engine.put("PAGE_NUM", Integer.valueOf(userView.getPage()));
+			engine.put("AYA_COUNT", Integer.valueOf(quranPage.getTo().getAbsoluteAya() - quranPage.getFrom().getAbsoluteAya()
 					+ 1));
 			engine.put("AYA_VIEW", resource.getString("theme.pageItem"));
 			retStr = engine.getUpdated(td.getPath() + "/" + resource.getString("theme.page"));

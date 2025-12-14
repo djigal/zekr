@@ -59,7 +59,7 @@ import net.sf.zekr.ui.helper.EventProtocol;
 import net.sf.zekr.ui.helper.EventUtils;
 import net.sf.zekr.ui.helper.FormUtils;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.Sort;
 import org.eclipse.swt.SWT;
@@ -2058,13 +2058,13 @@ public class QuranForm extends BaseForm {
       // add form size and location
       List<Integer> list = new ArrayList<Integer>();
       Rectangle r = shell.getBounds();
-      list.add(new Integer(r.x));
-      list.add(new Integer(r.y));
-      list.add(new Integer(r.width));
-      list.add(new Integer(r.height));
+      list.add(Integer.valueOf(r.x));
+      list.add(Integer.valueOf(r.y));
+      list.add(Integer.valueOf(r.width));
+      list.add(Integer.valueOf(r.height));
       if (!shell.getFullScreen()) { // don't save fullscreen state
          config.getProps().setProperty("view.shell.location", list);
-         config.getProps().setProperty("view.shell.maximized", new Boolean(shell.getMaximized()));
+         config.getProps().setProperty("view.shell.maximized", Boolean.valueOf(shell.getMaximized()));
       }
    }
 

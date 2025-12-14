@@ -19,7 +19,9 @@
       "Bash(javap:*)",
       "Bash(mvn:*)",
       "Bash(findstr:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(Select-String -Pattern \"warning:|error:|BUILD\")",
+      "Bash(Select-Object -Last 30)"
     ]
   }
 }

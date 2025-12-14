@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Logback configuration for Zekr
+  Migrated from log4j configuration
+-->
+<configuration>
+    <!-- Define the log file location using system property -->
+    <property name="LOG_FILE" value="${zekr.home}/zekr.log"/>
+
+    <!-- Rolling file appender -->
+    <appender name="RUNTIME" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%p] (%c{1}:%L) - %m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <!-- Rolling policy: max 400KB per file, keep 2 backup files -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%i</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>2</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>400KB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!-- Console appender for fallback -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-4r [%t] %-5p %c %x - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger for javazoom package (audio library) - only WARN and above -->
+    <logger name="javazoom" level="WARN"/>
+
+    <!-- Root logger: ALL level, output to RUNTIME appender -->
+    <root level="ALL">
+        <appender-ref ref="RUNTIME"/>
+    </root>
+</configuration>

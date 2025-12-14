@@ -321,7 +321,7 @@ public class OptionsForm extends BaseForm {
 		if (fromOk && pressOkToApply) {
 			props.setProperty("lang.default", selectedLangPack.id);
 			props.setProperty("theme.default", selectedTheme.id);
-			props.setProperty("options.general.resizeableTaskPane", new Boolean(isPaneResizeable));
+			props.setProperty("options.general.resizeableTaskPane", Boolean.valueOf(isPaneResizeable));
 			props.setProperty("view.sura.mode", suraAsTree ? "tree" : "combo");
 		}
 	}

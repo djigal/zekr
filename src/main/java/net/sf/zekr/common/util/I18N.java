@@ -36,14 +36,14 @@ public class I18N {
 	private static I18N thisInstance;
 	static {
 		baseMap = new HashMap<String, Integer>();
-		baseMap.put("fa", new Integer(0x6f0)); // Farsi (Persian)
-		baseMap.put("ur", new Integer(0x6f0)); // Urdu (numbers are the same as Persian)
-		baseMap.put("ar", new Integer(0x660)); // Indo-Arabic: SA, Syria, Egypt, UAE, Iraq, ...
-		baseMap.put("th", new Integer(0xe50)); // Thai: Thailand
-		baseMap.put("gu", new Integer(0xae6)); // Gujarati: India
-		baseMap.put("bn", new Integer(0x9e6)); // Bengali: India
-		baseMap.put("bo", new Integer(0xf20)); // Tibetan: Tibet
-		baseMap.put("lo", new Integer(0xed0)); // Lao: Laos
+		baseMap.put("fa", Integer.valueOf(0x6f0)); // Farsi (Persian)
+		baseMap.put("ur", Integer.valueOf(0x6f0)); // Urdu (numbers are the same as Persian)
+		baseMap.put("ar", Integer.valueOf(0x660)); // Indo-Arabic: SA, Syria, Egypt, UAE, Iraq, ...
+		baseMap.put("th", Integer.valueOf(0xe50)); // Thai: Thailand
+		baseMap.put("gu", Integer.valueOf(0xae6)); // Gujarati: India
+		baseMap.put("bn", Integer.valueOf(0x9e6)); // Bengali: India
+		baseMap.put("bo", Integer.valueOf(0xf20)); // Tibetan: Tibet
+		baseMap.put("lo", Integer.valueOf(0xed0)); // Lao: Laos
 	}
 
 	public I18N(Locale locale) {

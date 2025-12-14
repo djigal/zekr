@@ -215,9 +215,9 @@ public class CocoaUiEnhancer {
 	private static Object wrapPointer(long value) {
 		Class<?> PTR_CLASS = C.PTR_SIZEOF == 8 ? long.class : int.class;
 		if (PTR_CLASS == long.class) {
-			return new Long(value);
+			return Long.valueOf(value);
 		} else {
-			return new Integer((int) value);
+			return Integer.valueOf((int) value);
 		}
 	}
 

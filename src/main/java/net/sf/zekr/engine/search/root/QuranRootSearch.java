@@ -63,7 +63,7 @@ public class QuranRootSearch extends AbstractSearcher {
 			}
 			totalResult++;
 
-			wordIndexList.add(new Integer(rootAddr.wordIndex));
+			wordIndexList.add(Integer.valueOf(rootAddr.wordIndex));
 			// find occurrences in the same aya
 			// it assumes that addrList holds items sorted by Quran location
 			while (i < addrList.size()) {
@@ -71,7 +71,7 @@ public class QuranRootSearch extends AbstractSearcher {
 					RootAddress nextAddr = (RootAddress) addrList.get(i + 1);
 					if (nextAddr.loc.equals(loc)) {
 						totalResult++;
-						wordIndexList.add(new Integer(nextAddr.wordIndex));
+						wordIndexList.add(Integer.valueOf(nextAddr.wordIndex));
 						i++;
 					} else {
 						break;

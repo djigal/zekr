@@ -32,8 +32,8 @@ public abstract class AbstractSuraViewTemplate extends BaseViewTemplate {
 			engine.put("JUZ_LIST", QuranPropertiesUtils.getJuzInsideSura(suraNum));
 			engine.put("ALL_JUZ_LIST", QuranPropertiesUtils.getSuraJuzAsList(suraNum));
 			engine.put("SAJDA_LIST", QuranPropertiesUtils.getSajdaInsideList(suraNum));
-			engine.put("SURA_NUM", new Integer(suraNum)); // Note: suraNum is counted from 1
-			engine.put("AYA_NUM", new Integer(ayaNum)); // Note: ayaNum is counted from 1
+			engine.put("SURA_NUM", Integer.valueOf(suraNum)); // Note: suraNum is counted from 1
+			engine.put("AYA_NUM", Integer.valueOf(ayaNum)); // Note: ayaNum is counted from 1
 			engine.put("SURA_NAME", QuranProperties.getInstance().getSura(suraNum).getName());
 			engine.put("TITLE", langEngine.getMeaning("SURA") + ": "
 					+ QuranProperties.getInstance().getSura(suraNum).getName()); // the same as SURA_NAME

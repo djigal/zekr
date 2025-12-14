@@ -11,34 +11,32 @@ package net.sf.zekr.engine.log;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.Properties;
 
 import net.sf.zekr.common.config.ApplicationConfig;
 import net.sf.zekr.common.runtime.Naming;
 import net.sf.zekr.ui.error.ErrorForm;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.LoggerFactory;
 import org.eclipse.swt.widgets.Display;
 
 // TODO: this class should be removed in future. Logger should be obtained through normal common logger interface.
 /**
- * Zekr default logger wrapper class for Log4J library. This is not a singleton class. It creates a new instance of itself per
- * each call to <code>getInstance()</code>, because different classes should have different Log4J loggers associated with.
- * 
+ * Zekr default logger wrapper class for SLF4J library. This is not a singleton class. It creates a new instance of itself per
+ * each call to <code>getInstance()</code>, because different classes should have different SLF4J loggers associated with.
+ *
  * @author Mohsen Saboorian
  */
 public class Logger {
-   public static final Level INFO = Level.INFO;
-   public static final Level DEBUG = Level.DEBUG;
-   public static final Level WARN = Level.WARN;
-   public static final Level ERROR = Level.ERROR;
-   public static final Level FATAL = Level.FATAL;
+   // Level constants for backward compatibility (no longer used with SLF4J)
+   public static final int INFO = 0;
+   public static final int DEBUG = 1;
+   public static final int WARN = 2;
+   public static final int ERROR = 3;
+   public static final int FATAL = 4;
 
-   private org.apache.log4j.Logger logger;
+   private org.slf4j.Logger logger;
 
-   private static final String STACK_TRACE_INDENRAION = "  ";
-   private static final Level DEAFALT_LEVEL = INFO;
+   private static final int DEAFALT_LEVEL = INFO;
 
    public static final String LOG_FILE_PATH = Naming.getWorkspace() + File.separator + "zekr.log";
 
@@ -52,32 +50,22 @@ public class Logger {
             throw new RuntimeException("Can not create \'" + file.getAbsoluteFile() + "\'.");
       }
 
-      try {
-         Properties props = new Properties();
-         props.load(Logger.class.getResourceAsStream("/logger.properties"));
-         PropertyConfigurator.configure(props);
-      } catch (Exception e) {
-         // Fallback to console logging if config fails
-         PropertyConfigurator.configure(new Properties() {{
-            put("log4j.rootLogger", "DEBUG, A1");
-            put("log4j.appender.A1", "org.apache.log4j.ConsoleAppender");
-            put("log4j.appender.A1.layout", "org.apache.log4j.PatternLayout");
-            put("log4j.appender.A1.layout.ConversionPattern", "%-4r [%t] %-5p %c %x - %m%n");
-         }});
-      }
-      dumpSysInfo(org.apache.log4j.Logger.getLogger(Logger.class));
+      // SLF4J/Logback auto-configures from logback.xml in classpath
+      // No manual configuration needed like with Log4j PropertyConfigurator
+
+      dumpSysInfo(LoggerFactory.getLogger(Logger.class));
    }
 
    private Logger(Class<?> clazz) {
-      logger = org.apache.log4j.Logger.getLogger(clazz);
+      logger = LoggerFactory.getLogger(clazz);
    }
 
    /**
     * Dumps all necessary system properties.
-    * 
+    *
     * @param logger
     */
-   private static void dumpSysInfo(org.apache.log4j.Logger logger) {
+   private static void dumpSysInfo(org.slf4j.Logger logger) {
       String n = System.getProperty("line.separator");
       logger.info("System information:" + "\n" + "OS info:\t\t" + System.getProperty("os.name") + " - "
             + System.getProperty("os.version") + " - " + System.getProperty("os.arch") + n + "VM info:\t\t"
@@ -91,7 +79,7 @@ public class Logger {
 
    /**
     * For logging more precisely by implying the class name from which log message is sent.
-    * 
+    *
     * @param theClass logging source class
     * @return corresponding logger
     */
@@ -100,7 +88,7 @@ public class Logger {
    }
 
    final public void info(Object msg) {
-      logger.info(msg);
+      logger.info(String.valueOf(msg));
    }
 
    /**
@@ -116,59 +104,93 @@ public class Logger {
    }
 
    final public void debug(Object msg) {
-      logger.debug(msg);
+      logger.debug(String.valueOf(msg));
    }
 
    final public void warn(Object msg) {
-      logger.warn(msg);
+      logger.warn(String.valueOf(msg));
    }
 
    final public void warn(Object msg, Throwable th) {
-      logger.warn(msg, th);
+      logger.warn(String.valueOf(msg), th);
    }
 
    final public void error(Object msg) {
-      logger.error(msg);
+      logger.error(String.valueOf(msg));
    }
 
    final public void error(Object msg, Throwable th) {
-      logger.error(msg, th);
+      logger.error(String.valueOf(msg), th);
    }
 
    final public void fatal(Object msg) {
-      logger.fatal(msg);
+      // SLF4J doesn't have fatal level, use error
+      logger.error("[FATAL] " + String.valueOf(msg));
    }
 
    /**
     * This method logs <code>msg.toString()</code> if msg is not of type <code>{@link java.lang.Throwable}</code> (exception). If
     * the msg is in fact a <code>Throwable</code> object, it logs it as an error message implicitly. Then if
     * <code>ApplicationConfig.isFullyInitialized()</code>, it brings up an error dialog and show the exception to user.
-    * 
+    *
     * @param msg any object of type <code>String</code> or <code>Throwable</code>
     */
    final public void log(Object msg) {
       if (msg instanceof Throwable)
-         logException(Level.ERROR, (Throwable) msg, true);
+         logException(ERROR, (Throwable) msg, true);
       else
          log(DEAFALT_LEVEL, msg);
    }
 
    final public void implicitLog(Throwable th) {
-      logException(Level.ERROR, th, false);
+      logException(ERROR, th, false);
    }
 
-   final public void log(Level level, Object msg) {
-      logger.log(level, msg);
+   final public void log(int level, Object msg) {
+      String message = String.valueOf(msg);
+      switch (level) {
+         case DEBUG:
+            logger.debug(message);
+            break;
+         case INFO:
+            logger.info(message);
+            break;
+         case WARN:
+            logger.warn(message);
+            break;
+         case ERROR:
+            logger.error(message);
+            break;
+         case FATAL:
+            logger.error("[FATAL] " + message);
+            break;
+         default:
+            logger.info(message);
+      }
    }
 
-   private void logException(Level level, Throwable th, boolean showForm) {
-      logger.log(level, "[Exception stack trace for \"" + th.toString() + "\"]", th);
-      //		logger.log(level, "[Exception stack trace for \"" + th.toString() + "\"]");
-      //		StackTraceElement elements[] = th.getStackTrace();
-      //		for (int i = 0, n = elements.length; i < n; i++) {
-      //			logger.log(Priority.ERROR, STACK_TRACE_INDENRAION + elements[i].toString());
-      //		}
-      //		logger.log(level, "[/\"" + th.toString() + "\"]");
+   private void logException(int level, Throwable th, boolean showForm) {
+      String message = "[Exception stack trace for \"" + th.toString() + "\"]";
+      switch (level) {
+         case DEBUG:
+            logger.debug(message, th);
+            break;
+         case INFO:
+            logger.info(message, th);
+            break;
+         case WARN:
+            logger.warn(message, th);
+            break;
+         case ERROR:
+            logger.error(message, th);
+            break;
+         case FATAL:
+            logger.error("[FATAL] " + message, th);
+            break;
+         default:
+            logger.error(message, th);
+      }
+
       if (showForm && ApplicationConfig.isFullyInitialized()) {
          ErrorForm ef = new ErrorForm(Display.getCurrent(), th);
          ef.show();
@@ -188,11 +210,11 @@ public class Logger {
    /**
     * A call to this method will first log the <code>Throwable</code> error, and then <code>exit</code>s the virtual machine with
     * 1 error status.
-    * 
+    *
     * @param th throwable object
     */
    public void doFatal(Throwable th) {
-      logException(Level.FATAL, th, true);
+      logException(FATAL, th, true);
       Runtime.getRuntime().exit(1);
    }
 }

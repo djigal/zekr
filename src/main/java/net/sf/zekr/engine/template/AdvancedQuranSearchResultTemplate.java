@@ -46,7 +46,7 @@ public class AdvancedQuranSearchResultTemplate extends BaseViewTemplate {
                                              i18n.localize(String.valueOf(searchResult.getResultCount())) }));
          /*@fmt:on*/
          engine.put("AYA_LIST", searchResult.getPage(pageNo));
-         engine.put("PAGE_START_NUM", new Integer(pageNo * searchResult.getMaxResultPerPage()));
+         engine.put("PAGE_START_NUM", Integer.valueOf(pageNo * searchResult.getMaxResultPerPage()));
          engine.put(
                "PAGE_NUM_MSG",
                langEngine.getDynamicMeaning("SEARCH_PAGE", new String[] { i18n.localize(String.valueOf(pageNo + 1)),
