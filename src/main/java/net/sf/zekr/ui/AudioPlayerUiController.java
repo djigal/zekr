@@ -95,6 +95,8 @@ public class AudioPlayerUiController {
                playerController.setPlayingItem(PlayingItem.AYA);
             }
          }
+         // Ensure the text display is synchronized with the current audio location
+         quranForm.syncTextWithAudioLocation();
          playerTogglePlayPause(true, false);
       } catch (Exception e) {
          logger.error("Error while playing audio file", e);

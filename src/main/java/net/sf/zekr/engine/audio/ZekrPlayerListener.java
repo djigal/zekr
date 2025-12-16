@@ -76,6 +76,8 @@ public class ZekrPlayerListener implements BasicPlayerListener {
                   if (quranForm.playerUiController.isAudioControllerFormOpen()) {
                      quranForm.playerUiController.togglePlayPauseState(true);
                   }
+                  // Synchronize text display with audio location when playback starts
+                  quranForm.syncTextWithAudioLocation();
                } else if (code == BasicPlayerEvent.PAUSED || code == BasicPlayerEvent.STOPPED) {
                   if (quranForm.playerUiController.isAudioControllerFormOpen()) {
                      quranForm.playerUiController.togglePlayPauseState(false);

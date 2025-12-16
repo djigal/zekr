@@ -26,7 +26,9 @@
       "Bash(where:*)",
       "Bash(/c/jdk-21.0.2/bin/javac:*)",
       "Bash(done)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(dir:*)",
+      "Bash(powershell:*)"
     ]
   }
 }

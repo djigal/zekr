@@ -280,7 +280,7 @@ public class QuranForm extends BaseForm {
    /**
     * Initialize the QuranForm.
     * 
-    * @param display
+    * @param disp
     */
    public QuranForm(Display disp) {
       this.display = disp;
@@ -1592,16 +1592,77 @@ public class QuranForm extends BaseForm {
 
    private void focusOnAya(final Browser browser, int sura, int aya) {
       final String misc = getMiscOptions();
-      if (GlobalConfig.isWindows) {
-         browser.execute("focusOnAya(" + sura + "," + aya + (misc == null ? "" : "," + misc) + ");");
-      } else {
-         SwtBrowserUtils.trickyExecute(display, browser, "focusOnAya(" + sura + "," + aya + (misc == null ? "" : "," + misc)
-               + ");");
+      logger.info(">>> FOCUS ON AYA: Sura=" + sura + ", Aya=" + aya);
+
+      if (browser == null || browser.isDisposed()) {
+         logger.error("Browser unavailable!");
+         return;
+      }
+
+      // Use execute() instead of evaluate() to run in the page's context where jQuery is available
+      final String jsCommand =
+         "(function() {" +
+         "  try {" +
+         "    if (typeof $ === 'undefined') {" +
+         "      console.log('jQuery not loaded!');" +
+         "      return;" +
+         "    }" +
+         "    if (typeof focusOnAya !== 'function') {" +
+         "      console.log('focusOnAya function not found!');" +
+         "      return;" +
+         "    }" +
+         "    console.log('Calling focusOnAya(" + sura + "," + aya + ")');" +
+         "    focusOnAya(" + sura + "," + aya + (misc == null ? "" : "," + misc) + ");" +
+         "    console.log('focusOnAya completed');" +
+         "  } catch(e) {" +
+         "    console.error('Error in focusOnAya:', e);" +
+         "  }" +
+         "})();";
+
+      logger.info(">>> EXECUTING: focusOnAya(" + sura + "," + aya + ")");
+      try {
+         boolean success = browser.execute(jsCommand);
+         logger.info("JavaScript execute() returned: " + success);
+      } catch (Exception e) {
+         logger.error("Exception executing JavaScript", e);
       }
    }
 
    private void focusOnAya(final Browser browser, IQuranLocation loc) {
       focusOnAya(browser, loc.getSura(), loc.getAya());
+   }
+
+   /**
+    * Synchronizes the text display (Quran and translation browsers) with the current audio location.
+    * This method explicitly highlights the current verse being played.
+    */
+   public void syncTextWithAudioLocation() {
+      logger.info("!!! NEW VERSION 21:10 RUNNING !!!");
+      final IQuranLocation loc = uvc.getLocation();
+      if (loc == null || !loc.isValid()) {
+         logger.warn("syncTextWithAudioLocation called with invalid location");
+         return;
+      }
+
+      logger.info("=== SYNC AUDIO-TEXT === Location: " + loc + " (Sura=" + loc.getSura() + ", Aya=" + loc.getAya() + ")");
+      logger.info("=== SYNC FLAGS === updateQuran=" + updateQuran + ", updateTrans=" + updateTrans);
+
+      display.asyncExec(new Runnable() {
+         public void run() {
+            if (!isDisposed()) {
+               if (updateQuran && quranBrowser != null && !quranBrowser.isDisposed()) {
+                  logger.info("=== CALLING focusOnAya on QURAN browser for " + loc + " ===");
+                  focusOnAya(quranBrowser, loc);
+               } else {
+                  logger.warn("Skipping Quran browser: updateQuran=" + updateQuran + ", browser=" + (quranBrowser != null) + ", disposed=" + (quranBrowser != null && quranBrowser.isDisposed()));
+               }
+               if (updateTrans && transBrowser != null && !transBrowser.isDisposed()) {
+                  logger.info("=== CALLING focusOnAya on TRANS browser for " + loc + " ===");
+                  focusOnAya(transBrowser, loc);
+               }
+            }
+         }
+      });
    }
 
    private String getMiscOptions() {
