@@ -28,7 +28,8 @@
       "Bash(done)",
       "Bash(tree:*)",
       "Bash(dir:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(echo $JAVA_HOME)"
     ]
   }
 }
